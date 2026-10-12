@@ -20,7 +20,7 @@ inputs:
   # ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
   features:
     description: "Any of: hog | lbp | histogram | pixels"
-    default: "[hog, lbp]"
+    default: "[hog, hsv, pixels]"
 
   # │ hog — Histogram of Oriented Gradients
   # │ 🏛️ 2005 · Navneet Dalal & Bill Triggs (INRIA), to find pedestrians.
@@ -32,10 +32,10 @@ inputs:
   # │    real-time pedestrian detection in cars.
   hog_orientations:
     description: "Direction bins per cell (9 = every 20°)"
-    default: "9"
+    default: "12"
   hog_pixels_per_cell:
     description: "Cell size in pixels — try 8 and 4, then watch the gate"
-    default: "16"
+    default: "8"
   hog_cells_per_block:
     description: "Cells per normalisation block (per side)"
     default: "2"
@@ -78,22 +78,22 @@ inputs:
   # │    rotate textures, 60 times a second.
   augment_copies:
     description: "Extra augmented copies per training frame (0 = off)"
-    default: "1"
+    default: "4"
   augment_flip_horizontal:
     description: "Mirror left↔right"
     default: "true"
   augment_flip_vertical:
     description: "Mirror top↔bottom — careful: drops don't fall upwards"
-    default: "false"
+    default: "true"
   augment_rotate_degrees:
     description: "Random rotation up to ± this many degrees"
-    default: "8"
+    default: "25"
   augment_scale:
     description: "[min, max] random zoom"
-    default: "[0.92, 1.08]"
+    default: "[0.85, 1.15]"
   augment_brightness:
     description: "Random brightness change up to ± this fraction"
-    default: "0.15"
+    default: "0.10"
 
   # ━━━━━━━━━━━━━━━━━━━━━━━ end of this stage's values ━━━━━━━━━━━━━━━━━━━━━━━━━━
 

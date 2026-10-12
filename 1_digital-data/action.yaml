@@ -82,7 +82,7 @@ inputs:
   # │ ⚡ cv2.cvtColor: lookup tables and SIMD, one pass over the image.
   color_space:
     description: "gray | bgr | hsv | lab | ycrcb"
-    default: "gray"
+    default: "bgr"
   channel:
     description: "null, or 0 | 1 | 2 to keep one channel of the colour space"
     default: "null"

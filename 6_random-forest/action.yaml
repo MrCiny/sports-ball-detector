@@ -31,7 +31,7 @@ inputs:
   # │ 🎮 On an NVIDIA GPU: RAPIDS cuML's RandomForestClassifier, CUDA underneath.
   n_estimators:
     description: "Number of trees in the forest"
-    default: "200"
+    default: "300"
   max_features:
     description: "Features each split may look at: sqrt | log2 | a share like 0.5 | null (all: every tree alike)"
     default: "sqrt"

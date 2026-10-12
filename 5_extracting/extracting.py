@@ -32,24 +32,41 @@ from stages.stage import Stage, picture, run   # 🔒 the plumbing: values, inpu
 KEY = "extracting"
 
 
-def extract(gray: np.ndarray, stage_values: dict) -> dict[str, np.ndarray]:
-    """{feature name: vector} for one single-channel frame. main() glues them into one vector."""
+def extract(img: np.ndarray, space: str, stage_values: dict) -> dict[str, np.ndarray]:
+    gray = to_luma(img, space)
     out = {}
+
     for name in stage_values.get("features") or ["hog"]:
         if name == "hog":
             out["hog"] = hog_features(gray, stage_values)
         elif name == "lbp":
             out["lbp"] = lbp_features(gray, stage_values)
-        elif name == "histogram":                                # how bright, ignoring where
+        elif name == "hsv":
+            out["hsv"] = hsv_features(img, space)
+        elif name == "histogram":
             hist, _ = np.histogram(gray, bins=stage_values.get("histogram_bins", 32), range=(0, 256))
             out["histogram"] = hist / gray.size
-        elif name == "pixels":                                   # the frame itself, shrunk to a thumbnail
+        elif name == "pixels":
             s = stage_values.get("pixels_size", 16)
             out["pixels"] = cv2.resize(gray, (s, s), interpolation=cv2.INTER_AREA).ravel() / 255.0
         else:
-            raise SystemExit(f"❌ Unknown feature '{name}'. Choose hog | lbp | histogram | pixels")
+            raise SystemExit(f"Unknown feature '{name}'")
+
     return out
 
+def hsv_features(img: np.ndarray, space: str) -> np.ndarray:
+    if space == "rgb":
+        hsv = cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
+    elif space == "bgr":
+        hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    else:
+        raise ValueError(f"Unsupported color space: {space}")
+
+    hist = cv2.calcHist([hsv], [0, 1], None,
+                        [18, 8], [0, 180, 0, 256])
+
+    hist = hist.flatten()
+    return hist / max(hist.sum(), 1)
 
 # ── 5a · HOG: Histogram of Oriented Gradients ─────────────────────────────────────────────────────────
 # 👾 Cut the frame into cells and ask every cell: which way do the edges point, and how strongly? Measure the
@@ -173,7 +190,7 @@ def main() -> None:
     t0 = time.perf_counter()
     vectors, dims = [], {}
     for f in frames:
-        parts = extract(to_luma(f, space), stage_values)
+        parts = extract(f, space, stage_values)
         dims = {k: len(v) for k, v in parts.items()}
         vectors.append(np.concatenate(list(parts.values())))
     ms = 1000 * (time.perf_counter() - t0) / len(frames)
@@ -293,6 +310,10 @@ def feature_names(stage_values: dict, shape: tuple) -> list[tuple[str, tuple | N
             s = stage_values.get("pixels_size", 16)
             out += [(f"pixel ({r},{c}) of the {s}×{s} thumbnail", (r * h // s, c * w // s, (r + 1) * h // s, (c + 1) * w // s))
                     for r in range(s) for c in range(s)]
+        elif name == "hsv":
+            for h in range(18):
+                for s in range(8):
+                    out.append((f"HSV hue {h}, saturation {s}", None))
     return out
 
 
