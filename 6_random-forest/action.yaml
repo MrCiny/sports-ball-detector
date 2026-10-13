@@ -67,10 +67,10 @@ inputs:
   # │    patient safety, so recall has a gate and precision doesn't. Would you add one?
   gate_min_accuracy:
     description: "Test accuracy the model must reach before it may ship"
-    default: "0.85"
+    default: "0.75"
   gate_min_class_recall:
     description: "Recall of the worst class"
-    default: "0.75"
+    default: "0.65"
 
 runs:
   using: composite

@@ -38,10 +38,10 @@ inputs:
     default: "127"
   adaptive_block:
     description: "Odd neighbourhood size for the adaptive method"
-    default: "31"
+    default: "999"
   adaptive_c:
     description: "Constant subtracted from the local mean"
-    default: "5"
+    default: "10"
   invert:
     description: "true = dark pixels are foreground (walls, fluid, drops)"
     default: "true"
@@ -79,7 +79,7 @@ inputs:
     default: "simple"
   min_contour_area:
     description: "Contours smaller than this (px²) are thrown away — try 150"
-    default: "8"
+    default: "150"
   fill_holes:
     description: "true = fill the inside of closed outlines (the chamber)"
     default: "true"

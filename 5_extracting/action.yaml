@@ -19,8 +19,8 @@ inputs:
   #    🎛️  Experiment with this stage's values — change one, ▶ extracting.py, read the report
   # ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
   features:
-    description: "Any of: hog | lbp | histogram | pixels"
-    default: "[hog, hsv, pixels]"
+    description: "Any of: hog | lbp | histogram | pixels | hsv"
+    default: "[lbp, hsv, histogram]"
 
   # │ hog — Histogram of Oriented Gradients
   # │ 🏛️ 2005 · Navneet Dalal & Bill Triggs (INRIA), to find pedestrians.
@@ -47,13 +47,13 @@ inputs:
   # │ ⚡ 8 comparisons → 8 bits → one byte per pixel. Texture, as integers.
   lbp_points:
     description: "Neighbours P on the circle"
-    default: "8"
+    default: "16"
   lbp_radius:
     description: "Circle radius R in pixels"
-    default: "1"
+    default: "2"
   lbp_grid:
     description: "Grid of cells per side, one histogram each (keeps WHERE the texture is)"
-    default: "4"
+    default: "8"
   histogram_bins:
     description: "Bins for the plain brightness histogram feature"
     default: "32"
@@ -87,7 +87,7 @@ inputs:
     default: "true"
   augment_rotate_degrees:
     description: "Random rotation up to ± this many degrees"
-    default: "25"
+    default: "180"
   augment_scale:
     description: "[min, max] random zoom"
     default: "[0.85, 1.15]"
